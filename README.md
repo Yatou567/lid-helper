@@ -6,7 +6,7 @@ macOS 菜单栏小工具，一键切换「合盖保持运行」与「恢复正�
 
 **[下载最新版本](https://github.com/Yatou567/lid-helper/releases/latest)**
 
-从本仓库的 **Releases** 下载 `合盖助手.zip`，解压后双击「合盖助手.app」。点击菜单栏「合盖」，即可打开控制面板并切换状态。系统会在修改电源设置时请求管理员验证。
+从本仓库的 **Releases** 下载 `LidHelper-v1.0.0-macos-arm64.zip`，解压后双击「合盖助手.app」。点击菜单栏「合盖」，即可打开控制面板并切换状态。系统会在修改电源设置时请求管理员验证。
 
 当前安装包适用于 **Apple M 系列芯片、macOS 14 或以上**。Intel Mac 和 Windows 不适用。
 
