@@ -64,7 +64,7 @@ struct SystemPowerAccess: PowerAccess {
         }
     }
 
-    private static func run(_ executable: String, arguments: [String]) async throws -> String {
+    static func run(_ executable: String, arguments: [String]) async throws -> String {
         try await Task.detached(priority: .userInitiated) {
             let process = Process()
             let output = Pipe()
@@ -105,14 +105,17 @@ enum SwitchOutcome: Equatable, Sendable {
 struct PowerSwitch: Sendable {
     let access: any PowerAccess
 
+    func set(enabled: Bool) async throws -> SwitchOutcome {
+        let result = try await access.write(enabled: enabled)
+        let actual = try await access.read()
+        if result == .cancelled { return .cancelled(actual) }
+        guard actual == enabled else { throw PowerError.verificationFailed }
+        return .applied(actual)
+    }
+
     func toggle() async throws -> SwitchOutcome {
         // Read again at click time: another utility may have changed the setting.
         let before = try await access.read()
-        let target = !before
-        let result = try await access.write(enabled: target)
-        let actual = try await access.read()
-        if result == .cancelled { return .cancelled(actual) }
-        guard actual == target else { throw PowerError.verificationFailed }
-        return .applied(actual)
+        return try await set(enabled: !before)
     }
 }
