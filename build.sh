@@ -12,7 +12,8 @@ EXTRA_FLAGS=()
 if [[ "${LIDHELPER_DISABLE_PLUGIN_SANDBOX:-0}" == "1" ]]; then EXTRA_FLAGS=(-disable-sandbox); fi
 "$SWIFTC" "${EXTRA_FLAGS[@]}" -sdk "$SDK_PATH" -parse-as-library -swift-version 6 -target arm64-apple-macosx14.0 \
     -module-cache-path "$BUILD_DIR/module-cache" -O \
-    "$SOURCE_DIR/Sources/PowerCore.swift" "$SOURCE_DIR/Sources/LidHelper.swift" \
+    "$SOURCE_DIR/Sources/PowerCore.swift" "$SOURCE_DIR/Sources/PowerSession.swift" \
+    "$SOURCE_DIR/Sources/PowerModel.swift" "$SOURCE_DIR/Sources/LidHelper.swift" \
     -o "$APP_PATH/Contents/MacOS/LidHelper"
 cp "$SOURCE_DIR/Info.plist" "$APP_PATH/Contents/Info.plist"
 "$SWIFTC" -sdk "$SDK_PATH" -module-cache-path "$BUILD_DIR/module-cache" "$SOURCE_DIR/make-icon.swift" -o "$BUILD_DIR/make-icon"
@@ -20,7 +21,8 @@ cp "$SOURCE_DIR/Info.plist" "$APP_PATH/Contents/Info.plist"
 /usr/bin/codesign --force --sign - "$APP_PATH"
 "$SWIFTC" -sdk "$SDK_PATH" -parse-as-library -swift-version 6 -target arm64-apple-macosx14.0 \
     -module-cache-path "$BUILD_DIR/module-cache" \
-    "$SOURCE_DIR/Sources/PowerCore.swift" "$SOURCE_DIR/Tests/PowerCoreTests.swift" \
+    "$SOURCE_DIR/Sources/PowerCore.swift" "$SOURCE_DIR/Sources/PowerSession.swift" \
+    "$SOURCE_DIR/Sources/PowerModel.swift" "$SOURCE_DIR/Tests/PowerCoreTests.swift" \
     -o "$BUILD_DIR/PowerCoreTests"
 "$BUILD_DIR/PowerCoreTests"
 "$APP_PATH/Contents/MacOS/LidHelper" --status
